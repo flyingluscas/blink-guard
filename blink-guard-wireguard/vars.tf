@@ -15,7 +15,7 @@ variable "port" {
 
 variable "web_ui_port" {
   type    = number
-  default = 51821
+  default = 80
 }
 
 variable "peers" {
@@ -32,6 +32,11 @@ variable "public_subnet_id" {
 }
 
 variable "allowed_peers_ip" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
+}
+
+variable "allowed_admins_ip" {
   type    = list(string)
   default = ["0.0.0.0/0"]
 }

@@ -31,9 +31,9 @@ resource "aws_ecs_task_definition" "blink_guard" {
         { name : "LANG", value : var.lang },
         { name : "WG_HOST", value : aws_instance.ecs_instance.public_ip },
         { name : "PASSWORD_HASH", value : bcrypt(var.web_ui_password, 12) },
-        { name : "PORT", value : tostring(var.web_ui_port) },
         { name : "WG_PORT", value : tostring(var.port) },
         { name : "UI_TRAFFIC_STATS", value : "true" },
+        { name : "UI_CHART_TYPE", value : "1" },
       ]
       portMappings = [
         {
@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "blink_guard" {
           protocol      = "udp"
         },
         {
-          containerPort = var.web_ui_port
+          containerPort = 51821
           hostPort      = var.web_ui_port
           protocol      = "tcp"
         }
@@ -57,10 +57,6 @@ resource "aws_ecs_task_definition" "blink_guard" {
   ])
 
   depends_on = [aws_instance.ecs_instance]
-}
-
-data "http" "myip" {
-  url = "https://ipv4.icanhazip.com"
 }
 
 resource "aws_ecs_service" "blink_guard" {
